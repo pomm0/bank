@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  client:
+    image: node:lts-slim
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client/:/app
+    working_dir: /app
+    # Remove me when cra did release https://github.com/facebook/create-react-app/issues/8688#issuecomment-642331184
+    stdin_open: true
+    command: npm start
