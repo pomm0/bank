@@ -1,0 +1,57 @@
+@import 'layout/module';
+
+html,
+body {
+  background: $colorGrey;
+  font-size: 16px;
+}
+
+#root {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+}
+
+.primary {
+  color: $colorPrimary;
+}
+
+.grey {
+  color: $colorGrey;
+}
+
+.dark-grey {
+  color: $colorDarkGrey;
+}
+
+.green {
+  color: $colorGreen;
+}
+
+.red {
+  color: $colorRed;
+}
+
+.white {
+  color: $colorWhite;
+}
+
+.bg-primary {
+  background-color: $colorPrimary;
+}
+
+.bg-white {
+  background-color: $colorWhite;
+}
+
+.bg-green {
+  background-color: $colorGreen;
+}
+
+.font-md {
+  font-size: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}

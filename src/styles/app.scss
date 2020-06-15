@@ -1,0 +1,12 @@
+$breakpoint-md: 'screen and (min-width: 960px)' !default;
+
+$colorPrimary: #a5a58d;
+$colorGrey: #f2f2f2;
+$colorDarkGrey: #a9a9a9;
+$colorGreen: #55a630;
+$colorRed: #d00000;
+$colorWhite: #ffffff;
+
+@import 'reset';
+@import 'layout';
+@import 'features/module';
