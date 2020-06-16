@@ -1,6 +1,6 @@
-import { Factory } from "miragejs"
+import { Factory } from 'miragejs';
 import faker from 'faker';
 
 export default Factory.extend({
-  amount: () => faker.finance.amount(),
+  amount: () => parseFloat(faker.finance.amount())
 });

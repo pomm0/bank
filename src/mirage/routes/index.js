@@ -33,7 +33,7 @@ export const setupRoutes = (server) => {
   // Transaction routes
   server.get('/last-transactions', (schema) => {
     let allTransactions = schema.transactions.all();
-    // Sort by newest first TODO: verify
+    // Sort by newest first
     allTransactions = allTransactions.sort((a, b) => {
       return a.createdAt > b.createdAt ? -1 : 1;
     });
@@ -44,8 +44,10 @@ export const setupRoutes = (server) => {
   server.post('/transactions', (schema, { requestBody }) => {
     const model = schema.transactions.create(requestBody);
 
-    // Reconvert amount to negative value, as it is an outgoing transaction
-    model.update({ amount: model.amount * -1 });
+    model.update({
+      createdAt: new Date(),
+      isReceiving: false
+    });
 
     // TODO: Change serializer to singularize rootKey
     return { transaction: model.toJSON() };
@@ -63,6 +65,13 @@ export const setupRoutes = (server) => {
   });
 
   server.get('/transactions', (schema) => {
-    return schema.transactions.all();
+    let allTransactions = schema.transactions.all();
+
+    // Sort by newest first
+    allTransactions = allTransactions.sort((a, b) => {
+      return a.createdAt > b.createdAt ? -1 : 1;
+    });
+
+    return allTransactions;
   });
 };
