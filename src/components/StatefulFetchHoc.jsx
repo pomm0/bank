@@ -34,6 +34,7 @@ export const StatefulFetchHoc = (props) => {
   const fetch = () => {
     setState({ isError: false, isLoading: true, isResolved: false });
 
+    // TODO: Fix potential component state update while component is unmounted
     backendFetch({ urlPath, method, headers, body })
       .then((fetchResponse) => {
         if (!fetchResponse.ok) {

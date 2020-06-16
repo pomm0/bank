@@ -29,6 +29,7 @@ export const DynamicCard = (props) => {
   useEffect(() => {
     setState({ isError: false, isLoading: true });
 
+    // TODO: Fix potential component state update while component is unmounted
     promiseWithMinRuntime(backendFetch({ urlPath }))
       .then((response) => {
         if (!response.ok) {
