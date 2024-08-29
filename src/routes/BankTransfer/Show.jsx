@@ -28,8 +28,8 @@ const TransactionAccountDetails = ({ model, ...attributes }) => {
 
 export const Show = () => {
   const navigate = useNavigate();
-  const [urlSearchParams] = useSearchParams()
-  const { id }= useParams()
+  const [urlSearchParams] = useSearchParams();
+  const { id } = useParams();
 
   return (
     <>

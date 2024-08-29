@@ -3,7 +3,7 @@ import { Intro, FormGroup, Card } from 'components';
 import { useFormik } from 'formik';
 import { object, number, date, string } from 'yup';
 import { backendFetch } from 'utils/backendFetch';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const TODAY = new Date();
 TODAY.setUTCHours(0, 0, 0, 0);

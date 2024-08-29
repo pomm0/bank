@@ -1,5 +1,5 @@
 import { Factory } from 'miragejs';
-import { faker }  from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
 const NUMBERS_PER_TYPE = {
   visa: ['4111111111111111', '4012888888881881', '4222222222222'],

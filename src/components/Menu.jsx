@@ -38,7 +38,7 @@ const MenuWithRouter = ({ onNavigate }) => {
           <NavLink
             to="/"
             onClick={onNavigation}
-            className={({ isActive }) => "ph-1 pv-2" + (isActive ? " active" : "")}
+            className={({ isActive }) => 'ph-1 pv-2' + (isActive ? ' active' : '')}
             data-testid="menu-link-dashboard"
           >
             Dashboard
@@ -48,7 +48,7 @@ const MenuWithRouter = ({ onNavigate }) => {
           <NavLink
             to="/bank-transfer"
             onClick={onNavigation}
-            className={({ isActive }) => "ph-1 pv-2" + (isActive ? " active" : "")}
+            className={({ isActive }) => 'ph-1 pv-2' + (isActive ? ' active' : '')}
             data-testid="menu-link-bank-transfer"
           >
             Überweisung
@@ -58,7 +58,7 @@ const MenuWithRouter = ({ onNavigate }) => {
           <NavLink
             to="/card"
             onClick={onNavigation}
-            className={({ isActive }) => "ph-1 pv-2" + (isActive ? " active" : "")}
+            className={({ isActive }) => 'ph-1 pv-2' + (isActive ? ' active' : '')}
             data-testid="menu-link-card"
           >
             Karten
