@@ -2,6 +2,7 @@ import React from 'react';
 import { Intro, StatefulFetchHoc, Card, TransactionAmount, FabButton } from 'components';
 import { formatDate } from 'utils/intl';
 import { ReactComponent as AddSvg } from 'assets/add.svg';
+import { useNavigate } from 'react-router-dom';
 
 const ListElement = ({ transaction, onClick }) => {
   const accountDetails = transaction.isReceiving ? transaction.sender : transaction.receiver;
@@ -16,7 +17,8 @@ const ListElement = ({ transaction, onClick }) => {
   );
 };
 
-export const List = ({ history }) => {
+export const List = () => {
+  const navigate = useNavigate();
   return (
     <div className="pr-2">
       <Intro title="Überweisungen" className="mb-2 mt-4" />
@@ -37,7 +39,7 @@ export const List = ({ history }) => {
                   key={transaction.id}
                   transaction={transaction}
                   onClick={() => {
-                    history.push(`/bank-transfer/${transaction.id}`);
+                    navigate(`/bank-transfer/${transaction.id}`);
                   }}
                 ></ListElement>
               ))}
@@ -45,7 +47,7 @@ export const List = ({ history }) => {
         )}
       </StatefulFetchHoc>
 
-      <FabButton onClick={() => history.push('/bank-transfer/new')}>
+      <FabButton onClick={() => navigate('/bank-transfer/new')}>
         <AddSvg fill="#fff" />
       </FabButton>
     </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { withRouter } from 'react-router';
 import styled from 'styled-components';
 
 const NavList = styled.ul`
@@ -37,11 +36,9 @@ const MenuWithRouter = ({ onNavigate }) => {
       <NavList>
         <li className="mb-1">
           <NavLink
-            exact
             to="/"
             onClick={onNavigation}
-            activeClassName="active"
-            className="ph-1 pv-2"
+            className={({ isActive }) => "ph-1 pv-2" + (isActive ? " active" : "")}
             data-testid="menu-link-dashboard"
           >
             Dashboard
@@ -51,8 +48,7 @@ const MenuWithRouter = ({ onNavigate }) => {
           <NavLink
             to="/bank-transfer"
             onClick={onNavigation}
-            activeClassName="active"
-            className="ph-1 pv-2"
+            className={({ isActive }) => "ph-1 pv-2" + (isActive ? " active" : "")}
             data-testid="menu-link-bank-transfer"
           >
             Überweisung
@@ -62,8 +58,7 @@ const MenuWithRouter = ({ onNavigate }) => {
           <NavLink
             to="/card"
             onClick={onNavigation}
-            activeClassName="active"
-            className="ph-1 pv-2"
+            className={({ isActive }) => "ph-1 pv-2" + (isActive ? " active" : "")}
             data-testid="menu-link-card"
           >
             Karten
@@ -74,4 +69,4 @@ const MenuWithRouter = ({ onNavigate }) => {
   );
 };
 
-export const Menu = withRouter(MenuWithRouter);
+export const Menu = MenuWithRouter;

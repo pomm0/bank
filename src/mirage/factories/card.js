@@ -1,5 +1,5 @@
 import { Factory } from 'miragejs';
-import faker from 'faker';
+import { faker }  from '@faker-js/faker';
 
 const NUMBERS_PER_TYPE = {
   visa: ['4111111111111111', '4012888888881881', '4222222222222'],
@@ -8,13 +8,13 @@ const NUMBERS_PER_TYPE = {
 };
 
 export default Factory.extend({
-  type: () => faker.random.arrayElement(['visa', 'masterCard', 'americanExpress']),
-  active: () => faker.random.boolean(),
+  type: () => faker.helpers.arrayElement(['visa', 'masterCard', 'americanExpress']),
+  active: () => faker.helpers.arrayElement([true, false]),
   createdAt: () => faker.date.past(),
 
   afterCreate(model) {
     model.update({
-      number: faker.random.arrayElement(NUMBERS_PER_TYPE[model.type])
+      number: faker.helpers.arrayElement(NUMBERS_PER_TYPE[model.type])
     });
   }
 });

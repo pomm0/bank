@@ -16,11 +16,15 @@ Deployed on https://cv.mgruber.dev
 
 ## Inside docker
 
-Even this app only uses one service I use `docker-compose`. I like the simplesness of just calling `docker-compose up -d`.
+Even this app only uses one service I use `docker-compose`. I like the simplicity of just calling `docker-compose up -d`.
 
 - Start docker-compose with `docker-compose up` or `docker-compose up -d` (deamon mode)
-- Wait for server ready (it will install dependencies which may take a bit)
+- Wait for server ready. To track node logs use `docker-compose logs -f client`.
 - Go to `http://localhost:3000`
+
+OR
+
+Execute `docker-compose run client bash` and you will land in the clients docker container and you can start the app manually `npm install && npm run start`
 
 ## Run tests
 

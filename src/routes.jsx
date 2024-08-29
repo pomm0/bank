@@ -1,11 +1,11 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Routes as UpstreamRoutes, Route } from 'react-router-dom';
 import { BankTransfer, Card, Dashboard } from 'routes/index';
 
 export const Routes = () => (
-  <Switch>
-    <Route path="/bank-transfer" component={BankTransfer} />
-    <Route path="/card" component={Card} />
-    <Route path="/" component={Dashboard} />
-  </Switch>
+  <UpstreamRoutes>
+    <Route path="/bank-transfer/*" element={<BankTransfer />} />
+    <Route path="/card" element={<Card />} />
+    <Route path="/" element={<Dashboard />} />
+  </UpstreamRoutes>
 );

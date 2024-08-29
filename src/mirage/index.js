@@ -7,8 +7,7 @@ import {
 } from './factories';
 import { setupRoutes } from './routes';
 
-export default () => {
-  new Server({
+export default () => new Server({
     urlPrefix: process.env.REACT_APP_API_URL,
 
     models: {
@@ -42,4 +41,3 @@ export default () => {
       server.createList('transaction', 50);
     }
   });
-};

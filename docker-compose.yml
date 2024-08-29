@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   client:
-    image: node:lts-slim
+    image: node:lts-stretch-slim
     ports:
+      # Needed for app
       - 3000:3000
       # Needed for firebase
       - 9005:9005

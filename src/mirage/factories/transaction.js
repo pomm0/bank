@@ -1,5 +1,5 @@
 import { Factory } from 'miragejs';
-import faker from 'faker';
+import { faker }  from '@faker-js/faker';
 
 export default Factory.extend({
   receiver: () => {
@@ -16,8 +16,8 @@ export default Factory.extend({
       bic: faker.finance.bic()
     };
   },
-  reason: () => (faker.random.boolean() ? faker.lorem.words() : null),
+  reason: () => (faker.helpers.arrayElement([true, false]) ? faker.lorem.words() : null),
   amount: () => parseFloat(faker.finance.amount()),
-  isReceiving: () => faker.random.boolean(),
+  isReceiving: () => faker.helpers.arrayElement([true, false]),
   createdAt: () => faker.date.past()
 });

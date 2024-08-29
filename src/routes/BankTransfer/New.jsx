@@ -3,16 +3,23 @@ import { Intro, FormGroup, Card } from 'components';
 import { useFormik } from 'formik';
 import { object, number, date, string } from 'yup';
 import { backendFetch } from 'utils/backendFetch';
+import { useNavigate } from "react-router-dom";
 
 const TODAY = new Date();
+TODAY.setUTCHours(0, 0, 0, 0);
+const TODAY_DATE_STRING = TODAY.toISOString().split('T')[0];
+const YESTERDAY = new Date();
+YESTERDAY.setUTCHours(0, 0, 0, 0);
+YESTERDAY.setDate(YESTERDAY.getDate() - 1);
 
-export const New = ({ history }) => {
+export const New = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState({ isLoading: false, isError: false });
 
   const formik = useFormik({
     initialValues: {
       amount: '',
-      executeAt: '',
+      executeAt: TODAY_DATE_STRING,
       reason: '',
       receiver: {
         name: '',
@@ -23,7 +30,7 @@ export const New = ({ history }) => {
     validationSchema: object({
       amount: number().required().positive(),
       // TODO: fix min-date validation of today
-      executeAt: date().min(new Date()).required(),
+      executeAt: date().min(YESTERDAY).required(),
       receiver: object({
         name: string().required(),
         // TODO: real iban validation
@@ -50,7 +57,7 @@ export const New = ({ history }) => {
           throw new Error('[NEW] fetch response error');
         }
 
-        history.push(`/bank-transfer/${json.transaction.id}?state=newSuccess`);
+        navigate(`/bank-transfer/${json.transaction.id}?state=newSuccess`);
       } catch (error) {
         setState({ isLoading: false, isError: true });
       }
@@ -85,7 +92,7 @@ export const New = ({ history }) => {
               onChange={formik.handleChange}
               value={formik.values.executeAt}
               className="w-100"
-              min={TODAY.toISOString().split('T')[0]}
+              min={TODAY_DATE_STRING}
             />
           </FormGroup>
 

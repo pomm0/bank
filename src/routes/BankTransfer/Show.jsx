@@ -1,6 +1,7 @@
 import React from 'react';
 import { Intro, DynamicCard, Card, TransactionAmount } from 'components';
 import { formatDate } from 'utils/intl';
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 
 const TransactionAccountDetails = ({ model, ...attributes }) => {
   if (Object.keys(model).length === 0) {
@@ -25,12 +26,10 @@ const TransactionAccountDetails = ({ model, ...attributes }) => {
   );
 };
 
-export const Show = ({ history, match, location }) => {
-  const urlSearchParams = new URLSearchParams(location.search);
-
-  const {
-    params: { id }
-  } = match;
+export const Show = () => {
+  const navigate = useNavigate();
+  const [urlSearchParams] = useSearchParams()
+  const { id }= useParams()
 
   return (
     <>
@@ -77,7 +76,7 @@ export const Show = ({ history, match, location }) => {
         )}
       </DynamicCard>
 
-      <button type="button" className="mt-4" onClick={() => history.push('/bank-transfer')}>
+      <button type="button" className="mt-4" onClick={() => navigate('/bank-transfer')}>
         Zur Überweisungsliste
       </button>
     </>
