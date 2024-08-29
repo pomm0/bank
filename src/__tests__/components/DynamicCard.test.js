@@ -1,68 +1,60 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
 import { DynamicCard } from 'components';
 import { Server, Response } from 'miragejs';
 
 const urlPrefix = process.env.REACT_APP_API_URL;
 const server = new Server({ urlPrefix });
+server.logging = false;
 const url = `${urlPrefix}/my-url`;
 
 describe('Intial', () => {
-  it('It starts fetch on init', (asyncDone) => {
+  it('It starts fetch on init', async () => {
     const serverHandler = jest.fn((_, request) => {
       // Check that proper url has been fetched
       expect(request.url).toBe(url);
-      asyncDone();
       return new Response(200);
     });
     // Register mirage server mock to be able to catch fetches
     server.get(url, serverHandler);
 
-    render(<DynamicCard urlPath="/my-url" />);
+    await act(() => render(<DynamicCard urlPath="/my-url" />));
 
     expect(serverHandler.mock.calls.length).toBe(1);
   });
 });
 
 describe('Runtime', () => {
-  it('It does not show content while fetch', (asyncDone) => {
-    server.get(url, () => {
-      asyncDone();
-      return new Response(200);
-    });
+  it('It does not show content while fetch', async () => {
+    server.get(url, () => new Response(200));
 
-    const { queryByTestId } = render(
+    const { queryByTestId } = await act(() => render(
       <DynamicCard urlPath="/my-url">
         <div data-testid="my-child"></div>
       </DynamicCard>
-    );
+    ));
 
     expect(queryByTestId('my-child')).toBeFalsy();
   });
 
-  it('It does show card-loading while fetch', (asyncDone) => {
+  it('It does show card-loading while fetch', async () => {
     server.get(url, () => {
-      asyncDone();
       return new Response(200);
     });
 
-    const { queryByTestId } = render(<DynamicCard urlPath="/my-url" />);
+    const { queryByTestId } = await act(() => render(<DynamicCard urlPath="/my-url" />));
 
     expect(queryByTestId('card-loading')).toBeTruthy();
   });
 
-  it('It does show error-message when fetch failes', (asyncDone) => {
-    server.get(url, () => {
-      // wait for next render. TODO: find better solution
-      setTimeout(() => {
-        expect(queryByTestId('dynamic-card-error')).toBeTruthy();
-        asyncDone();
-      }, 500);
+  it('It does show error-message when fetch failes', async () => {
+    const serverHandler = jest.fn(() => new Response(500));
+    server.get(url, serverHandler);
 
-      return new Response(500);
-    });
+    const { queryByTestId } = await act(() => render(<DynamicCard urlPath="/my-url" />));
 
-    const { queryByTestId } = render(<DynamicCard urlPath="/my-url" />);
+    await waitFor(() => expect(serverHandler.mock.calls.length).toBe(1));
+    await waitFor(() => expect(queryByTestId('dynamic-card-error')).toBeTruthy());
   });
 
   // TODO: fix me

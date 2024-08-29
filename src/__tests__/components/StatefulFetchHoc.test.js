@@ -1,10 +1,11 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { StatefulFetchHoc } from 'components';
 import { Server, Response } from 'miragejs';
 
 const urlPrefix = process.env.REACT_APP_API_URL;
 const server = new Server({ urlPrefix });
+server.logging = false;
 const url = `${urlPrefix}/my-url`;
 
 describe('Intial', () => {
@@ -23,28 +24,89 @@ describe('Intial', () => {
 });
 
 describe('Runtime', () => {
-  it('It starts fetch on render props `fetch` click', (asyncDone) => {
-    const serverHandler = jest.fn(() => {
-      // wait for next render. TODO: find better solution
-      setTimeout(() => {
-        asyncDone();
-      }, 500);
-      return new Response(200, null, { user: { name: 'myName' } });
-    });
+  it('It starts fetch on render props `fetch` click', async () => {
+    let lazyProps = {
+      isLoading: null,
+      isError: null,
+      isResolved: null,
+      response: null
+    };
+
+    const setProps = (props) => {
+      lazyProps = props
+    }
+
+    const serverHandler = jest.fn(() => new Response(200, {}, { user: { name: 'myName' } }));
     server.get(url, serverHandler);
 
-    const { queryByTestId } = render(
+    const { queryByTestId } = await act(() => render(
       <StatefulFetchHoc urlPath="/my-url">
-        {({ fetch }) => (
-          <button type="button" onClick={fetch} data-testid="trigger">
-            Trigger
-          </button>
+        {({ fetch, response, state }) => (
+          <>
+            {setProps({
+              isLoading: state.isLoading,
+              isError: state.isError,
+              isResolved: state.isResolved,
+              response
+            })}
+            <button type="button" onClick={fetch} data-testid="trigger">
+              Trigger
+            </button>
+          </>
         )}
       </StatefulFetchHoc>
-    );
+    ));
 
     fireEvent.click(queryByTestId('trigger'));
 
-    expect(serverHandler.mock.calls.length).toBe(1);
+    await waitFor(() => expect(serverHandler.mock.calls.length).toBe(1));
+
+    // while fetching
+    await waitFor(() => expect(lazyProps.isLoading).toBe(true));
+
+    // fetch done
+    await waitFor(() => expect(lazyProps.isResolved).toBe(true));
+    await waitFor(() => expect(lazyProps.isError).toBe(false));
+    await waitFor(() => expect(lazyProps.response?.user?.name).toBe('myName'));
+  });
+
+  it('It sets isError prop to true on error', async () => {
+    let lazyProps = {
+      isLoading: null,
+      isError: null,
+      isResolved: null,
+      response: null
+    };
+
+    const setProps = (props) => {
+      lazyProps = props
+    }
+
+    const serverHandler = jest.fn(() => new Response(500));
+    server.get(url, serverHandler);
+
+    const { queryByTestId } = await act(() => render(
+      <StatefulFetchHoc urlPath="/my-url">
+        {({ fetch, response, state }) => (
+          <>
+            {setProps({
+              isLoading: state.isLoading,
+              isError: state.isError,
+              isResolved: state.isResolved,
+              response
+            })}
+            <button type="button" onClick={fetch} data-testid="trigger">
+              Trigger
+            </button>
+          </>
+        )}
+      </StatefulFetchHoc>
+    ));
+
+    fireEvent.click(queryByTestId('trigger'));
+
+    // fetch done
+    await waitFor(() => expect(lazyProps.isError).toBe(true));
+    await waitFor(() => expect(lazyProps.response).toBe(null));
   });
 });

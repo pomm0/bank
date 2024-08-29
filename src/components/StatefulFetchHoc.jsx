@@ -31,34 +31,34 @@ export const StatefulFetchHoc = (props) => {
     isResolved: false
   });
 
-  const fetch = () => {
+  // TODO: Fix potential component state update while component is unmounted
+  const fetch = async () => {
     setState({ isError: false, isLoading: true, isResolved: false });
 
-    // TODO: Fix potential component state update while component is unmounted
-    backendFetch({ urlPath, method, headers, body })
-      .then((fetchResponse) => {
-        if (!fetchResponse.ok) {
-          throw new Error(`[StatefulFetchHoc] fetch error: "${urlPath}"`);
-        }
+    try {
+      const fetchResponse = await backendFetch({ urlPath, method, headers, body })
+      if (!fetchResponse.ok) {
+        throw new Error(`[StatefulFetchHoc] fetch error: "${urlPath}"`);
+      }
 
-        const contentType = fetchResponse.headers.get('content-type');
-        if (contentType && contentType.indexOf('application/json') !== -1) {
-          return fetchResponse.json();
-        }
+      const contentType = fetchResponse.headers.get('content-type');
+      let response = null;
+      if (contentType && contentType.indexOf('application/json') !== -1) {
+        response = await fetchResponse.json();
+      } else {
+        response = await fetchResponse.text();
+      }
 
-        return fetchResponse.text();
-      })
-      .then((response) => {
-        setResponse(response);
-        setState({ isError: false, isLoading: false, isResolved: true });
+      setResponse(response);
+      setState({ isError: false, isLoading: false, isResolved: true });
 
-        if (typeof onSuccess === 'function') {
-          onSuccess(response);
-        }
-      })
-      .catch(() => {
-        setState({ isError: true, isLoading: false, isResolved: false });
-      });
+      if (typeof onSuccess === 'function') {
+        onSuccess(response);
+      }
+    } catch (error) {
+      setResponse(null);
+      setState({ isError: true, isLoading: false, isResolved: false });
+    }
   };
 
   useEffect(() => {
