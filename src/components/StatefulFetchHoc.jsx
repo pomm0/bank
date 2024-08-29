@@ -36,7 +36,7 @@ export const StatefulFetchHoc = (props) => {
     setState({ isError: false, isLoading: true, isResolved: false });
 
     try {
-      const fetchResponse = await backendFetch({ urlPath, method, headers, body })
+      const fetchResponse = await backendFetch({ urlPath, method, headers, body });
       if (!fetchResponse.ok) {
         throw new Error(`[StatefulFetchHoc] fetch error: "${urlPath}"`);
       }

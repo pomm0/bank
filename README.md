@@ -41,4 +41,4 @@ Execute `docker-compose run client bash` and you will land in the clients docker
 - Add E2E testing
 - Add translations (https://react.i18next.com/)
 - Remove `data-testid` from production build (https://github.com/oliviertassinari/babel-plugin-react-remove-properties)
-- Allow `today` as valid date for new bank transfer
+- Cache fetched data

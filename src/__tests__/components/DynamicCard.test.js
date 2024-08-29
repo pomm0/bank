@@ -28,11 +28,13 @@ describe('Runtime', () => {
   it('It does not show content while fetch', async () => {
     server.get(url, () => new Response(200));
 
-    const { queryByTestId } = await act(() => render(
-      <DynamicCard urlPath="/my-url">
-        <div data-testid="my-child"></div>
-      </DynamicCard>
-    ));
+    const { queryByTestId } = await act(() =>
+      render(
+        <DynamicCard urlPath="/my-url">
+          <div data-testid="my-child"></div>
+        </DynamicCard>
+      )
+    );
 
     expect(queryByTestId('my-child')).toBeFalsy();
   });

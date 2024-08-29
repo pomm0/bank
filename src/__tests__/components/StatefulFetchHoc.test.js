@@ -33,29 +33,31 @@ describe('Runtime', () => {
     };
 
     const setProps = (props) => {
-      lazyProps = props
-    }
+      lazyProps = props;
+    };
 
     const serverHandler = jest.fn(() => new Response(200, {}, { user: { name: 'myName' } }));
     server.get(url, serverHandler);
 
-    const { queryByTestId } = await act(() => render(
-      <StatefulFetchHoc urlPath="/my-url">
-        {({ fetch, response, state }) => (
-          <>
-            {setProps({
-              isLoading: state.isLoading,
-              isError: state.isError,
-              isResolved: state.isResolved,
-              response
-            })}
-            <button type="button" onClick={fetch} data-testid="trigger">
-              Trigger
-            </button>
-          </>
-        )}
-      </StatefulFetchHoc>
-    ));
+    const { queryByTestId } = await act(() =>
+      render(
+        <StatefulFetchHoc urlPath="/my-url">
+          {({ fetch, response, state }) => (
+            <>
+              {setProps({
+                isLoading: state.isLoading,
+                isError: state.isError,
+                isResolved: state.isResolved,
+                response
+              })}
+              <button type="button" onClick={fetch} data-testid="trigger">
+                Trigger
+              </button>
+            </>
+          )}
+        </StatefulFetchHoc>
+      )
+    );
 
     fireEvent.click(queryByTestId('trigger'));
 
@@ -79,29 +81,31 @@ describe('Runtime', () => {
     };
 
     const setProps = (props) => {
-      lazyProps = props
-    }
+      lazyProps = props;
+    };
 
     const serverHandler = jest.fn(() => new Response(500));
     server.get(url, serverHandler);
 
-    const { queryByTestId } = await act(() => render(
-      <StatefulFetchHoc urlPath="/my-url">
-        {({ fetch, response, state }) => (
-          <>
-            {setProps({
-              isLoading: state.isLoading,
-              isError: state.isError,
-              isResolved: state.isResolved,
-              response
-            })}
-            <button type="button" onClick={fetch} data-testid="trigger">
-              Trigger
-            </button>
-          </>
-        )}
-      </StatefulFetchHoc>
-    ));
+    const { queryByTestId } = await act(() =>
+      render(
+        <StatefulFetchHoc urlPath="/my-url">
+          {({ fetch, response, state }) => (
+            <>
+              {setProps({
+                isLoading: state.isLoading,
+                isError: state.isError,
+                isResolved: state.isResolved,
+                response
+              })}
+              <button type="button" onClick={fetch} data-testid="trigger">
+                Trigger
+              </button>
+            </>
+          )}
+        </StatefulFetchHoc>
+      )
+    );
 
     fireEvent.click(queryByTestId('trigger'));
 
