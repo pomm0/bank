@@ -4,7 +4,7 @@ A react showcase app.
 The visual part was not the main focus.
 It uses [miragejs](https://miragejs.com/) to mock api-server.
 
-Deployed on https://cv.mgruber.dev
+Deployed on https://bank.mgruber.dev
 
 ---
 
